@@ -14,6 +14,17 @@ describe('compare input/output', function() {
     this.config = {
       preset: 'default',
 
+      whiteSpace: {
+        before: {
+          ObjectExpressionClosingBrace: 1,
+          ArrayExpressionClosing: 1
+        },
+        after: {
+          ObjectExpressionOpeningBrace: 1,
+          ArrayExpressionOpening: 1
+        }
+      },
+
       lineBreak: {
         before: {
           ArrayExpressionClosing: 1
@@ -58,6 +69,28 @@ describe('compare input/output', function() {
         var output = esformatter.format(input, this.config);
 
         expect(output).to.be.eql(getFile(type, 'output-keycount.js'));
+      });
+
+      it('supports whiteSpace settings', function() {
+        var input = getFile(type, 'input-keycount.js');
+        var config = Object.create(this.config);
+        config.whiteSpace = {
+          before: {
+            ArrayExpressionClosing: 0,
+            ArrayExpressionComma: 1,
+            ObjectExpressionClosingBrace: 0,
+            PropertyName: 0
+          },
+          after: {
+            ArrayExpressionComma: 0,
+            ArrayExpressionOpening: 0,
+            ObjectExpressionOpeningBrace: 0,
+            PropertyValue: 1
+          }
+        };
+        var output = esformatter.format(input, config);
+
+        expect(output).to.be.eql(getFile(type, 'output-keycount-2.js'));
       });
     });
   });
