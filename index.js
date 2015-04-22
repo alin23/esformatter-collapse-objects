@@ -1,6 +1,7 @@
 var defaults = require('defaults-deep');
 var rocambole = require('rocambole');
 var _tk = require('rocambole-token');
+var _ws = require('rocambole-whitespace');
 
 var MAX_DEPTH = 3;
 
@@ -20,12 +21,13 @@ module.exports = {
       ObjectExpression: defaultOptions,
       ArrayExpression: defaultOptions
     });
+    _ws.setOptions(opts && opts.whiteSpace);
   },
 
   transformAfter: function(ast) {
     rocambole.recursive(ast, transform);
   }
-}
+};
 
 function transform(node) {
   // Don't try to collapse non-objects or non-arrays
@@ -69,6 +71,7 @@ function transform(node) {
 
   // if none of the above returns, collapse the whitespace.
   collapse(node);
+  limitSpaces(node);
 }
 
 function getDepth(node, init) {
@@ -180,4 +183,58 @@ function expectedLength(node) {
   }
 
   return length;
+}
+
+function limitSpaces(node) {
+  if (node.type === 'ArrayExpression') {
+    limitArraySpaces(node);
+  } else {
+    limitObjectSpaces(node);
+  }
+}
+
+function limitArraySpaces(node) {
+  node.elements.forEach(function(el) {
+    // sparse arrays have `null` elements
+    if (!el) return;
+
+    var prev = _tk.findPrevNonEmpty(el.startToken);
+    if (prev.value === ',') {
+      _ws.limit(prev, 'ArrayExpressionComma');
+    }
+  });
+
+  // opening/closing takes precedence over comma rules
+  _ws.limitAfter(node.startToken, 'ArrayExpressionOpening');
+  _ws.limitBefore(node.endToken, 'ArrayExpressionClosing');
+}
+
+function limitObjectSpaces(node) {
+  node.properties.forEach(function(prop) {
+    _ws.limitBefore(prop.key.startToken, 'PropertyName');
+    _ws.limitAfter(prop.key.endToken, 'PropertyName');
+    _ws.limitBefore(getValueStart(prop), 'PropertyValue');
+    _ws.limitAfter(getValueEnd(prop), 'PropertyValue');
+  });
+
+  // opening/closing takes precedence over property rules
+  _ws.limitAfter(node.startToken, 'ObjectExpressionOpeningBrace');
+  _ws.limitBefore(node.endToken, 'ObjectExpressionClosingBrace');
+}
+
+// borrowed from esformatter/lib/hooks/ObjectExpression
+function getValueStart(prop) {
+  var start = prop.value.startToken;
+  return (prop.kind === 'get' || prop.kind === 'set') ?
+    start :
+    // we need to grab first/last "executable" token to avoid issues (see #191)
+    _tk.findNext(_tk.findPrev(start, ':'), _tk.isCode);
+}
+
+// borrowed from esformatter/lib/hooks/ObjectExpression
+function getValueEnd(prop) {
+  // we need to grab next "," or "}" because value might be surrounded by
+  // parenthesis which would break the regular logic
+  var end = _tk.findNext(prop.value.endToken, [',', '}']);
+  return  _tk.findPrev(end, _tk.isCode);
 }
