@@ -5,4 +5,4 @@ var x = [
   'g'
 ];
 
-var y = [ 'h', 'j' ];
+var y = ['h', 'j'];

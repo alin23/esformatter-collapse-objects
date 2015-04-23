@@ -1,6 +1,6 @@
 "use strict";
 
-var nestedTwo = { foo: { bar: 'baz' } };
+var nestedTwo = {foo: {bar: 'baz'}};
 
 var nestedThree = {
   foo: {
@@ -14,7 +14,7 @@ var nestedThree = {
   }
 };
 
-var nestedTwoEmpty = { foo: {} }
+var nestedTwoEmpty = {foo: {}}
 
 var nestedFunction = {
   foo: function() {

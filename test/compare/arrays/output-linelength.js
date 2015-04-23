@@ -2,4 +2,4 @@ var x = [
   'somereallyreallyreallyreallylongvalue'
 ]
 
-var y = [ 'b' ];
+var y = ['b'];

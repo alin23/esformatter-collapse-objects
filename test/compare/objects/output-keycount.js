@@ -5,5 +5,4 @@ var x = {
   g: 'h'
 };
 
-var y = { g: 'h', i: 'j' };
-
+var y = {g: 'h',i: 'j'};

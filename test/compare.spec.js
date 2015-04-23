@@ -14,17 +14,6 @@ describe('compare input/output', function() {
     this.config = {
       preset: 'default',
 
-      whiteSpace: {
-        before: {
-          ObjectExpressionClosingBrace: 1,
-          ArrayExpressionClosing: 1
-        },
-        after: {
-          ObjectExpressionOpeningBrace: 1,
-          ArrayExpressionOpening: 1
-        }
-      },
-
       lineBreak: {
         before: {
           ArrayExpressionClosing: 1

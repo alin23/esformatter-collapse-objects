@@ -1,6 +1,6 @@
 "use strict";
 
-var nestedTwo = [ [ 'baz' ] ];
+var nestedTwo = [['baz']];
 
 var nestedThree = [
   [
@@ -11,7 +11,7 @@ var nestedThree = [
   ]
 ];
 
-var nestedTwoEmpty = [ [] ];
+var nestedTwoEmpty = [[]];
 
 var nestedFunction = [
   function() {
