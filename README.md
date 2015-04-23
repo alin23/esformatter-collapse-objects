@@ -50,6 +50,20 @@ Add the following to your esformatter config when collapsing arrays:
 },
 ```
 
+Since expressions were collapsed, you might be surprised that some appear as
+`{a:b,c:d}`. This is because esformatter defaults are tuned toward expanded
+expressions. Try merging the following into your config for whitespace before
+each property in an object:
+
+```json
+{
+  "whiteSpace": {
+    "before": {
+      "PropertyName": 1
+    }
+}
+```
+
 ## Options
 
 The following is the default configuration for the plugin:
