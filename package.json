@@ -1,6 +1,6 @@
 {
   "name": "esformatter-collapse-objects",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "esformatter plugin: conditionally collapses objects and array literals",
   "main": "index.js",
   "scripts": {
