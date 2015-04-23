@@ -121,13 +121,6 @@ function collapse(node) {
   // This one seems short
   _tk.eachInBetween(node.startToken, node.endToken, function(token) {
     if (_tk.isBr(token)) {
-
-      // Insert one blank to replace the line break
-      _tk.before(token, {
-        type: 'WhiteSpace',
-        value: ' '
-      });
-
       // Remove all whitespace/indent after the line break
       var next = token.next;
       while (_tk.isEmpty(next)) {
@@ -236,5 +229,5 @@ function getValueEnd(prop) {
   // we need to grab next "," or "}" because value might be surrounded by
   // parenthesis which would break the regular logic
   var end = _tk.findNext(prop.value.endToken, [',', '}']);
-  return  _tk.findPrev(end, _tk.isCode);
+  return _tk.findPrev(end, _tk.isCode);
 }
