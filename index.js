@@ -42,30 +42,30 @@ function transform(node) {
 
   // It collapses objects that are short enough
   // 0 indicates measurement failed, ignore
-  if ('maxLineLength' in nodeOptions) {
+  if (nodeOptions.maxLineLength >= 0) {
     var length = expectedLength(node);
     if (length === 0 || length > nodeOptions.maxLineLength) {
       return;
     }
   }
 
-  if ('maxKeys' in nodeOptions) {
+  // if maxKeys is less than 0, ignore it completely (opt-out)
+  if (nodeOptions.maxKeys >= 0) {
     if (getProperties(node).length > nodeOptions.maxKeys) {
       return;
     }
   }
 
-  if ('maxDepth' in nodeOptions) {
+  // if maxDepth is less than 0, ignore it completely (opt-out)
+  if (nodeOptions.maxDepth >= 0) {
     if (exceedsDepth(node, nodeOptions.maxDepth)) {
       return;
     }
   }
 
-  if ('forbidden' in nodeOptions) {
-    for (var i = 0; i < getProperties(node).length; i++) {
-      if (~nodeOptions.forbidden.indexOf(getValueAt(node, i).type)) {
-        return;
-      }
+  for (var i = 0; i < getProperties(node).length; i++) {
+    if (~nodeOptions.forbidden.indexOf(getValueAt(node, i).type)) {
+      return;
     }
   }
 
