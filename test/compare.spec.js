@@ -39,6 +39,16 @@ describe('compare input/output', function() {
 
         expect(output).to.be.eql(getFile(type, 'output-depth.js'));
       });
+
+      it('ignores maxDepth if -1', function () {
+        var input = getFile(type, 'input-depth.js');
+        this.config.collapseObjects.ArrayExpression.maxDepth = -1;
+        this.config.collapseObjects.ObjectExpression.maxDepth = -1;
+
+        var output = esformatter.format(input, this.config);
+
+        expect(output).to.be.eql(getFile(type, 'output-depth-negative.js'));
+      })
     });
 
     describe('line lengths', function() {
@@ -58,6 +68,24 @@ describe('compare input/output', function() {
         var output = esformatter.format(input, this.config);
 
         expect(output).to.be.eql(getFile(type, 'output-keycount.js'));
+      });
+
+      it('never collapses with a key count of 0', function() {
+        var input = getFile(type, 'input-keycount.js');
+        this.config.collapseObjects.ArrayExpression.maxKeys = 0;
+        this.config.collapseObjects.ObjectExpression.maxKeys = 0;
+        var output = esformatter.format(input, this.config);
+
+        expect(output).to.be.eql(getFile(type, 'output-keycount-0.js'));
+      });
+
+      it('ignores key count when -1', function() {
+        var input = getFile(type, 'input-keycount.js');
+        this.config.collapseObjects.ArrayExpression.maxKeys = -1;
+        this.config.collapseObjects.ObjectExpression.maxKeys = -1;
+        var output = esformatter.format(input, this.config);
+
+        expect(output).to.be.eql(getFile(type, 'output-keycount-negative.js'));
       });
 
       it('supports whiteSpace settings', function() {
