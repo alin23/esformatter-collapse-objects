@@ -56,7 +56,7 @@ function transform(node) {
   }
 
   if ('maxDepth' in nodeOptions) {
-    if (getDepth(node) > nodeOptions.maxDepth) {
+    if (exceedsDepth(node, nodeOptions.maxDepth)) {
       return;
     }
   }
@@ -74,29 +74,19 @@ function transform(node) {
   limitSpaces(node);
 }
 
-function getDepth(node, init) {
-  init = init || 1;
-
-  // For performance reasons don't traverse too deep.
-  if (init > MAX_DEPTH) return Infinity;
-
-  var candidates = [];
-
-  var props = getProperties(node);
-  if (props) {
-    for (var i = 0; i < props.length; i++) {
-      var val = getValueAt(node, i);
-      if (isComposite(val)) {
-        candidates.push(getDepth(val, init + 1));
-      }
+function exceedsDepth(root, max) {
+  var depth = 0;
+  var depths = {};
+  rocambole.moonwalk(root, function (node) {
+    // don't count objects more than once that we've
+    // seen at this depth level
+    if (isComposite(node) && !depths[node.depth]) {
+      depths[node.depth] = true;
+      depth++;
     }
-  }
+  })
 
-  if (candidates.length) {
-    return Math.max.apply(null, candidates);
-  } else {
-    return init;
-  }
+  return depth > max;
 }
 
 function isComposite(node) {
