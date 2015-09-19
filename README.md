@@ -8,7 +8,7 @@ conditionally collapsing object and array literals.
 * Respects your original esformatter whitespace settings
 * Conditions include a **max line-length**, a **max number of keys/elements** in the literal,
   a **max depth** of the literal (when it contains other objects or arrays), or when
-  it contains complex expressions like inline functions.
+  it contains complex expressions like inline function expressions.
 
 
 ## Usage
@@ -66,33 +66,39 @@ each property in an object:
 
 ## Options
 
-The following is the default configuration for the plugin:
+The following is the default configuration for the plugin, which can be reproduced
+and modified in your .esformatter config:
 
-```js
+```json
 
 {
-  ObjectExpression: {
-    maxLineLength: 80,
-    maxKeys: 3,
-    maxDepth: 2,
-    forbidden: [
-      'FunctionExpression'
-    ]
-  },
-  ArrayExpression: {
-    maxLineLength: 80,
-    maxKeys: 3,
-    maxDepth: 2,
-    forbidden: [
-      'FunctionExpression'
-    ]
+  "collapseObjects": {
+    "ObjectExpression": {
+      "maxLineLength": 80,
+      "maxKeys": 3,
+      "maxDepth": 2,
+      "forbidden": [
+        "FunctionExpression"
+      ]
+    },
+    "ArrayExpression": {
+      "maxLineLength": 80,
+      "maxKeys": 3,
+      "maxDepth": 2,
+      "forbidden": [
+        "FunctionExpression"
+      ]
+    }
   }
 }
+
 ```
 
 Options map esprima AST Node types (in this case both ObjectExpression and
 ArrayExpression) to their respective options, just like indentation in
 esformatter.
+
+__Set either expression's value to `-1` to opt out of collapsing those nodes.__
 
 ### maxLineLength (int)
 If the literal exceeds a certain number of columns collapsed, it will *not* be collapsed.

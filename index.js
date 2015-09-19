@@ -32,13 +32,14 @@ module.exports = {
 function transform(node) {
   // Don't try to collapse non-objects or non-arrays
   if (!~Object.keys(options).indexOf(node.type)) return;
-
-  var nodeOptions = options[node.type];
+  if (options[node.type] === -1) return;
 
   var parentType = node.parent.type;
   if (parentType === 'Property' || parentType === 'ArrayExpression') {
     return;
   }
+
+  var nodeOptions = options[node.type];
 
   // It collapses objects that are short enough
   // 0 indicates measurement failed, ignore
