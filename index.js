@@ -199,6 +199,11 @@ function limitObjectSpaces(node) {
     _ws.limitAfter(prop.key.endToken, 'PropertyName');
     _ws.limitBefore(getValueStart(prop), 'PropertyValue');
     _ws.limitAfter(getValueEnd(prop), 'PropertyValue');
+
+    // Handle the spacing around object values that are ObjectExpressions
+    if (prop.value.type === 'ObjectExpression') {
+      limitObjectSpaces(prop.value);
+    }
   });
 
   // opening/closing takes precedence over property rules
