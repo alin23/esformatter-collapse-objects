@@ -109,6 +109,28 @@ describe('compare input/output', function() {
 
         expect(output).to.be.eql(getFile(type, 'output-keycount-2.js'));
       });
+
+      it('supports whiteSpace settings for nested objects', function() {
+        var input = getFile(type, 'input-objectexpression.js');
+        var config = Object.create(this.config);
+        config.whiteSpace = {
+          before: {
+            ArrayExpressionClosing: 0,
+            ArrayExpressionComma: 1,
+            ObjectExpressionClosingBrace: 1,
+            PropertyName: 0
+          },
+          after: {
+            ArrayExpressionComma: 0,
+            ArrayExpressionOpening: 0,
+            ObjectExpressionOpeningBrace: 1,
+            PropertyValue: 1
+          }
+        };
+        var output = esformatter.format(input, config);
+
+        expect(output).to.be.eql(getFile(type, 'output-objectexpression.js'));
+      });
     });
   });
 });
