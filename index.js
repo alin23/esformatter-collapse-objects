@@ -34,11 +34,6 @@ function transform(node) {
   if (!~Object.keys(options).indexOf(node.type)) return;
   if (options[node.type] === -1) return;
 
-  var parentType = node.parent.type;
-  if (parentType === 'Property' || parentType === 'ArrayExpression') {
-    return;
-  }
-
   var nodeOptions = options[node.type];
 
   // It collapses objects that are short enough
